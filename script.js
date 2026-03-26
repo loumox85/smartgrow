@@ -82,16 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Gestion du chargement initial de la page
     function handleInitialLoad() {
-        let path = window.location.pathname;
-        if (path.startsWith('/')) {
-            path = path.substring(1);
-        }
-        if (path.endsWith('/')) {
-            path = path.slice(0, -1);
-        }
-
-        // Sur GitHub Pages project site, pathname commence par <repo>/
         const repoName = 'smartgrow';
+
+        // Retire slash de début/fin
+        let path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+
         if (path === repoName) {
             path = '';
         } else if (path.startsWith(repoName + '/')) {
@@ -101,7 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (path === '' || path === 'index.html') {
             path = 'Presentation_Projet/acceuil.html';
         }
-        
+
+        console.log('[DEBUG] handleInitialLoad resolve path ->', path);
+
         loadPage(path);
         setActiveNavLink(path);
     }
