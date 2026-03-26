@@ -38,7 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentPagePath = pagePath; // Met à jour la page actuelle
             } catch (error) {
                 console.error('Erreur lors du chargement de la page :', error);
-                mainContent.innerHTML = '<h1>Page non trouvée</h1><p>Désolé, cette page n\'existe pas.</p>';
+                mainContent.innerHTML = `
+                    <h1>Page non trouvée</h1>
+                    <p>Désolé, cette page n\'existe pas.</p>
+                    <p><strong>Chemin tenté :</strong> ${pagePath}</p>
+                    <p><strong>Détails :</strong> ${error.message}</p>
+                `;
                 mainContent.classList.remove('fade-out'); // Assure que le contenu d'erreur est visible
             }
         }, 400); // Doit correspondre à la durée de la transition CSS
@@ -80,6 +85,17 @@ document.addEventListener('DOMContentLoaded', () => {
         let path = window.location.pathname;
         if (path.startsWith('/')) {
             path = path.substring(1);
+        }
+        if (path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+
+        // Sur GitHub Pages project site, pathname commence par <repo>/
+        const repoName = 'smartgrow';
+        if (path === repoName) {
+            path = '';
+        } else if (path.startsWith(repoName + '/')) {
+            path = path.slice(repoName.length + 1);
         }
 
         if (path === '' || path === 'index.html') {
